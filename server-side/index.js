@@ -34,14 +34,14 @@ const verifyToken = (req, res, next) =>{
             return res.status(401).send({message:'unauthorized'})
           }
           console.log(decoded)
+          req.user = decoded
+          next()
         })
       }
-      console.log(token)
-  next()
 }
 // p- 18:53
-// const uri = `mongodb://localhost:27017`;
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.ts8x6gb.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
+const uri = "mongodb://192.168.0.101:27017";
+// const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.ts8x6gb.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -172,7 +172,12 @@ async function run() {
         })
       // get all items posted by a specific for creator
     app.get('/myposteditems/:email', verifyToken, async (req, res) => {
+      // from verify token
+      const tokenEmail = req.user.email
       const email = req.params.email
+      if(tokenEmail !== email){
+        return res.status(403).send({message:'forbidden access'})
+      }
       const query = { 'creator.email': email }
       const result = await itemsCollection.find(query).toArray()
       res.send(result)

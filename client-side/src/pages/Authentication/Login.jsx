@@ -22,6 +22,8 @@ const Login = () => {
     const pass = form.password.value
     try {
       const result = await signIn(email, pass)
+
+      // get token from server using email
       const {data} = await axios.post(`${import.meta.env.VITE_API_URL}/jwt`,
         {email:result?.email},{withCredentials: true})
       toast.success('Login Successful')
