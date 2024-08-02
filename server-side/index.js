@@ -40,6 +40,7 @@ const verifyToken = (req, res, next) =>{
       }
 }
 // p- 18:53
+// const uri = "mongodb://localhost:27017";
 const uri = "mongodb://192.168.0.101:27017";
 // const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.ts8x6gb.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
