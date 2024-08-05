@@ -15,6 +15,7 @@ const Header = () => {
 
         const navLink =<>
             <li><NavLink to="/">Home</NavLink></li>
+            <li><NavLink to="/javascript">Javascript</NavLink></li>
             <li><NavLink to="/password">Password</NavLink></li>
             <li><NavLink to="/allitems">All Items</NavLink></li>
             {user && <>
@@ -31,7 +32,7 @@ const Header = () => {
             </>
     return (
 
-            <div className="navbar h-11">
+            <div className="navbar bg-slate-500 text-white header">
                 <div className="navbar-start">
                     <div className="dropdown">
                     <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">

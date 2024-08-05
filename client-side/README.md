@@ -21,4 +21,3 @@ Currently, two official plugins are available:
 - [https://www.npmjs.com/package/sort-by] sort-by
 - [https://sweetalert2.github.io/] sweetalert2
 - [https://www.npmjs.com/package/swiper] swiper
-- []

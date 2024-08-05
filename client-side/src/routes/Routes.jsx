@@ -14,6 +14,8 @@ import Dashboard from '../layouts/Dashboard'
 import Admin from '../dashboard/admin/Admin'
 import ManageItems from '../dashboard/admin/ManageItems'
 import PasswordInput from '../pages/PasswordInput'
+import Javascript from '../layouts/Javascript'
+import Array from '../pages/Javascript/Array/Array'
 const router = createBrowserRouter([
   {
     path: '/',
@@ -81,6 +83,21 @@ const router = createBrowserRouter([
         path:'/dashboard/manageitems',
         element:<ManageItems/>
       }
+    ]
+  },
+  // Javascript
+  {
+    path:'/javascript',
+    element:<Javascript/>,
+    children:[
+      {
+        path:'/javascript',
+        element:<Array/>
+      },
+      // {
+      //   path:'/dashboard/manageitems',
+      //   element:<ManageItems/>
+      // }
     ]
   }
 ])
