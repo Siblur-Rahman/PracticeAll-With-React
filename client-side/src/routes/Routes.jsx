@@ -16,6 +16,7 @@ import ManageItems from '../dashboard/admin/ManageItems'
 import PasswordInput from '../pages/PasswordInput'
 import Javascript from '../layouts/Javascript'
 import Array from '../pages/Javascript/Array/Array'
+import AllProducts from '../pages/AllProducts'
 const router = createBrowserRouter([
   {
     path: '/',
@@ -51,6 +52,7 @@ const router = createBrowserRouter([
         ),
         loader:() =>  fetch(`${import.meta.env.VITE_API_URL}/approveitems`),
       },
+      
       {
         path:'/MyPostedItems/:email',
         element:<MyPostedItems/>,
@@ -68,7 +70,15 @@ const router = createBrowserRouter([
       {
         path:'mywishlist',
         element: <MyWishList/>
-      }
+      },
+      
+      {
+        path: '/allproducts',
+        element: (
+            <AllProducts />
+        ),
+        loader:() =>  fetch('https://dummyjson.com/products?limit=40&skip=10&select=title,images,description,price,category,rating'),
+      },
     ],
   },
   {

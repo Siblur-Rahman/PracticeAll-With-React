@@ -40,8 +40,8 @@ const verifyToken = (req, res, next) =>{
       }
 }
 // p- 18:53
-// const uri = "mongodb://localhost:27017";
-const uri = "mongodb://192.168.0.101:27017";
+const uri = "mongodb://localhost:27017";
+// const uri = "mongodb://192.168.0.101:27017";
 // const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.ts8x6gb.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 
@@ -60,6 +60,8 @@ async function run() {
     const itemsCollection = client.db('practiceAll').collection('items')
     const usersCollection = client.db('practiceAll').collection('users')
     const itemwishlistCollection = client.db('practiceAll').collection('itemwishlist')
+    const productsCollection = client.db('msrStore').collection('products')
+
 
     // jwt genarate
     app.post('/jwt', async(req, res)=>{
@@ -118,6 +120,11 @@ async function run() {
       res.send(result)
     })
         // Save a item data in db for creator
+        app.post('/product', async (req, res) => {
+          const productData = req.body
+          const result = await productsCollection.insertOne(productData)
+          res.send(result)
+        })
         app.post('/item', async (req, res) => {
           const itemData = req.body
           const result = await itemsCollection.insertOne(itemData)

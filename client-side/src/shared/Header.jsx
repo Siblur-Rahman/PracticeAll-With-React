@@ -15,7 +15,7 @@ const Header = () => {
 
         const navLink =<>
             <li><NavLink to="/">Home</NavLink></li>
-            <li><NavLink to="/javascript">Javascript</NavLink></li>
+            <li><NavLink to="/javascript#map">Javascript</NavLink></li>
             <li><NavLink to="/password">Password</NavLink></li>
             <li><NavLink to="/allitems">All Items</NavLink></li>
             {user && <>
