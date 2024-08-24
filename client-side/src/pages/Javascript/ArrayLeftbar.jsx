@@ -19,7 +19,7 @@ const ArrayLeftbar = () => {
                             data.map(data=><div key={data.page_title}>
                                 <div className="heading">{data.page_title}</div>
                                 {
-                                    data.topic.map(topic=><a key={topic} href={`#${topic}`} className="link">{topic}</a>)
+                                    data.topic.map(topic=><a key={topic} href={`/${topic}`} className="link">{topic}</a>)
                                 }
                             </div>)
                         }

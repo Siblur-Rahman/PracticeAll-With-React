@@ -1,21 +1,24 @@
 import { Outlet } from 'react-router-dom'
 // import Navbar from '../components/Navbar'
-import Footer from '../components/Footer'
 import Header from '../shared/Header'
+import Footer from '../shared/Footer'
+import ReactPracticeLeftbar from '../pages/ReactPractices/ReactPracticeLeftbar'
 // import NavbarItem from '../components/NavbarItem'
 
 const Main = () => {
   return (
-    <div className='px-4'>
-      {/* Header */}
-      <Header/>
-      {/* Outlet */}
-      <div className='min-h-[calc(100vh-306px)] md:px-10 lg:px-16 lg:w-3/4 lg:mx-auto'>
-        <Outlet />
-      </div>
-      {/* Footer */}
-      <Footer />
-    </div>
+    <>
+    <Header/>
+    {/* sideber */}
+    {/* <div className="leftBar min-h-[calc(100vh-200px)] p-5">
+        <ReactPracticeLeftbar/>
+    </div> */}
+        {/* outlet */}
+        <div className="content">
+        <Outlet/>
+        </div>
+        <Footer/>
+    </>
   )
 }
 
