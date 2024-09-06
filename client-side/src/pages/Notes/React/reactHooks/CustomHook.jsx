@@ -1,4 +1,4 @@
-import Blog from "../../../../components/Blog";
+import Blog from "../../../../shared/Blog";
 
 const items =["Hooks are reusable functions.","When you have component logic that needs to be used by multiple components, we can extract that logic to a custom Hook."]
 

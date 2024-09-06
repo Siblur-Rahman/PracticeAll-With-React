@@ -1,24 +1,36 @@
-import { Outlet } from 'react-router-dom'
-// import Navbar from '../components/Navbar'
+import {Outlet, useLocation} from 'react-router-dom'
 import Header from '../shared/Header'
 import Footer from '../shared/Footer'
-import ReactPracticeLeftbar from '../pages/ReactPractices/ReactPracticeLeftbar'
-// import NavbarItem from '../components/NavbarItem'
+import NotesLeftbar from '../pages/Notes/NotesLeftbar'
+import BackendLeftbar from '../pages/Backend/BackendLeftbar'
+import { useEffect } from 'react'
+import {Active } from '../shared/CommonJS'
+
 
 const Main = () => {
+  const {pathname} = useLocation();
+  
+  useEffect(() =>{
+    Active();
+}, [])
+
   return (
-    <>
-    <Header/>
-    {/* sideber */}
-    {/* <div className="leftBar min-h-[calc(100vh-200px)] p-5">
-        <ReactPracticeLeftbar/>
-    </div> */}
-        {/* outlet */}
-        <div className="content">
-        <Outlet/>
+     <>
+        <Header/>
+        {/* sideber */}
+        <div className="leftBar min-h-[calc(100vh-200px)]">
+            {/* BackendLeftbar */}
+              {pathname.includes("backend")  && <BackendLeftbar/>}
+            {/* NotesLeftbar */}
+              {pathname.includes("notes")  && <NotesLeftbar/>}
         </div>
+        {/* outlet */}
+        <div className="content min-h-screen">
+          <Outlet/>
+        </div>
+        {/* Footer */}
         <Footer/>
-    </>
+        </>
   )
 }
 

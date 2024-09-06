@@ -1,4 +1,4 @@
-import Blog from "../../../../components/Blog";
+import Blog from "../../../../shared/Blog";
 
 const HelmetAsync = () => {
     return (

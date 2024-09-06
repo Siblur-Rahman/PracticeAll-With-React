@@ -1,5 +1,5 @@
-import Blog from "../../../components/Blog";
 
+import Blog from "../../../shared/Blog";
 
 // const leftbar =
 var acc = document.getElementsByClassName("accordion");
@@ -52,6 +52,44 @@ export default FileName;
         }
         />
         <Blog
+            topic={'Leftbar Update'}
+            code={
+`
+
+import { Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+
+const FileLeftbar = () => {
+  const {pathname} = useLocation();
+    const links =[
+        {
+            title:'Get',
+            path:'/backend/get',
+            sub:{
+                title:['with Fetch', 'with axios',],
+            }
+        }
+    ]
+    return (
+        <>
+            {
+                links?.map((link, index) => <> <Link key={index} to={link.path} className={backticktext-xl px-2 dollar{pathname === link.path && 'bg-red-500 text-white'}backtick}>{link.title}</Link>
+                <ul className={backtickpl-3  dollar{pathname === link.path? 'static':'hidden'}backtick}>
+                {link?.sub?.title.map((subItem, ind) => <li key={ind}><a  href={backtick#dollar{subItem}backtick} className="link">{subItem}</a></li>)}
+                </ul>
+                </>
+                )
+            }
+
+        </>
+    );
+};
+
+export default FileLeftbar;
+`
+            }
+        />
+        <Blog
         topic={'Leftbar'}
         code={
 `
@@ -74,7 +112,7 @@ return (
         <div className="heading">{data.title}</div>
         {
             data.topic.map(topic=><a key={topic} 
-                href={'#doller{topic}'} 
+                href={'#dollar{topic}'} 
                 className="link">{topic}</a>)
         }
     </div>)

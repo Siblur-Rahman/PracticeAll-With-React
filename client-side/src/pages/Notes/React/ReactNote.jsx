@@ -8,7 +8,7 @@ import Topics from "./totics/Topics";
 import ReactAPI from "./ReactAPI/ReactAPI";
 import Athintication from "./Athintication/Athintication";
 import Route from "./Route/Route";
-import Blog from "../../../components/Blog";
+import Blog from "../../../shared/Blog";
 // import HelmetAsync from "./Components/HelmetAsync";
 
 const ReactNote = () => {

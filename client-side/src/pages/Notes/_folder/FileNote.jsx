@@ -1,11 +1,10 @@
 import {useEffect } from "react";
-import {Active, Accordion} from "../../../shared/CommonJS"
-import Blog from "../../../components/Blog";
+import {Active} from "../../../shared/CommonJS"
+import Blog from "../../../shared/Blog";
 
 const FileName = () => {
     useEffect(() =>{
         Active();
-        Accordion()
     })
 
     return ( 

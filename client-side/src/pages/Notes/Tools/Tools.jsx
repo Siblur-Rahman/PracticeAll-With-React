@@ -2,7 +2,6 @@
 import {useEffect } from "react";
 // import { ToolsForCode } from "../../CodeProvider";
 import {Active}  from "../../../shared/CommonJS";
-import ToolsLeftbar from "./ToolsLeftbar";
 import PageSetup from "./PageSetup";
 import Images from "./Images"
 import Theme from "./Theme";
@@ -11,6 +10,7 @@ import IndexPH from './indexPH/IndexPH';
 import KeyboardShort from "./KeyBoardShortcut/KeyboardShort";
 import DisplaySymbol from "./DisplaySymbol";
 import Assignments from "./indexPH/Assignments";
+import SomeComponents from "./SomeComponents";
 const Tools = () => {
     // const {curlyBraceOpen, curlyBraceClosed, greaterThan,
     //     lessThan} = useContext(ToolsForCode)
@@ -20,6 +20,7 @@ const Tools = () => {
     return (
         <>   
         <div>
+            <SomeComponents/>
             <DisplaySymbol/>
            <PageSetup/>
            <Theme/>

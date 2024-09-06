@@ -40,9 +40,8 @@ const verifyToken = (req, res, next) =>{
       }
 }
 // p- 18:53
-// const uri = "mongodb://localhost:27017";
-// const uri = "mongodb://192.168.0.101:27017";
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.ts8x6gb.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
+const uri = "mongodb://localhost:27017";
+// const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.ts8x6gb.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -57,8 +56,8 @@ async function run() {
   try {
 
     // Items
-    const itemsCollection = client.db('practiceAll').collection('items')
-    const usersCollection = client.db('practiceAll').collection('users')
+    const usersCollection = client.db('allPracticWithReact').collection('users')
+    const itemsCollection = client.db('allPracticWithReact').collection('items')
     const itemwishlistCollection = client.db('practiceAll').collection('itemwishlist')
     const productsCollection = client.db('msrStore').collection('products')
 
@@ -79,7 +78,6 @@ async function run() {
     })
     // Clear token on logout
     app.get('/logout', (req, res)=>{
-      console.log('hit')
       res
       .clearCookie('token',{
         httpOnly: true,
@@ -91,6 +89,7 @@ async function run() {
     })
     // Get all items data from db for Admin
     app.get('/allitems', async (req, res) => {
+      console.log('Hit')
       const result = await itemsCollection.find().toArray()
       res.send(result)
     })

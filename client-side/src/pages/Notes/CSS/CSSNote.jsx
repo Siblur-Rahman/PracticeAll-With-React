@@ -1,6 +1,6 @@
 import {useEffect } from "react";
 import {Active} from "../../../shared/CommonJS"
-import Blog from "../../../components/Blog";
+import Blog from "../../../shared/Blog";
 
 const CSSNote = () => {
     useEffect(() =>{

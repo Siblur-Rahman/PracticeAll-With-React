@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Blog from "../../../../components/Blog";
+import Blog from "../../../../shared/Blog";
 
 const HookUseSatate = () => {
     const [number, setNumber]=useState(0)

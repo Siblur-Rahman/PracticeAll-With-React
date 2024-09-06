@@ -1,13 +1,13 @@
 import { useEffect } from "react";
-import {Active, Accordion } from "../../../shared/CommonJS"
+import {Active} from "../../../shared/CommonJS"
 // import useGetData from './../../../hooks/useGetData';
 
 const ToolsLeftbar = () => {
     // const [getdata]=useGetData('toolsLeftbar.json');
     const getdata=[
         {
-            title:"",
-            topic:["DisplaySymbol","Page setUp","Theme","Images", "Index"]
+            title:"For Creating Folder&File",
+            topic:["some components","DisplaySymbol","Display Codes","Page setUp","Theme","Images", "Index"]
         },
         {
             title:"Index of PH",
@@ -25,7 +25,6 @@ const ToolsLeftbar = () => {
     ];
     useEffect(() =>{
         Active();
-        Accordion()
     })
     return (
         

@@ -18,11 +18,12 @@ p{
 /* some class */
 .header {
     display: flex;
-    justify-content: space-evenly;
+    justify-content:space-between;
+    gap: 10px;
     width: 100%;
     height: 40px;
-    line-height: 30px;
-    padding: 0 2% 0 0;
+    line-height: 40px;
+    padding: 0 2%;
     z-index: 4;
     background-color: #01071b;
     position: fixed;
@@ -31,13 +32,14 @@ p{
 }
 
 .text-white{
-    color: rgb(241, 11, 11) !important;
+    color: white !important;
 }
 .header a{
     color: aliceblue;
     text-decoration: none;
-    padding: 0 5px;
+    padding:5px;
     border-radius: 5px;
+    text-align: center;
     /* margin-left: 10px; */
 }
 .heading{
@@ -98,6 +100,16 @@ p{
     padding: 0px 10px 20px 10px;
     overflow: auto;
 }
+.footer{
+    width: 80%;
+    position: relative;
+    bottom:0;
+    left: 20%;
+    z-index: 2;
+    /* margin-left: 15%; */
+    padding: 0px 10px 20px 10px;
+    overflow: auto;
+}
 /* Color */
 .greenyellow{
   color: greenyellow !important;
@@ -128,7 +140,7 @@ p{
   /* background-color: #fff; */
   background: rgb(1, 9, 19);
   color: #f7f4f1;
-  padding: 8px 12px;
+  /* padding: 8px 12px; */
   border-left: 4px solid #4CAF50;
   word-wrap: break-word;
   font-size: 15px;

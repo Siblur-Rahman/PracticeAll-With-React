@@ -1,5 +1,5 @@
-import Blog from "../../../../components/Blog";
 
+import Blog from './../../../../shared/Blog';
 const GitGitHub = () => {
     return (
         <div className="topic-border">
