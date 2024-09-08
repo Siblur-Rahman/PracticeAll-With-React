@@ -28,7 +28,7 @@ const ToolsLeftbar = () => {
     })
     return (
         
-        <>
+        <div className="mt-5">
             {
                 getdata.map(data=><div key={data.title}>
                     <div className="sidebarHeading flex-col">{data.title}</div>
@@ -40,7 +40,7 @@ const ToolsLeftbar = () => {
                 </div>)
             }
 
-        </>
+        </div>
     );
 };
 

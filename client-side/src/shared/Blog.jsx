@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 
 
 
-const Blog = ({id, topic,mark, fileName, npmCode, heading, define, defineWithIndex, url, video, time, code}) => {
+const Blog = ({id, topic,mark, fileName, npmCode, heading, define, defineWithIndex, url, video, time, codes, code, code_highlight}) => {
     return (
         <>
         {mark && <h2 className='mark text-2xl'>{mark}</h2>}
@@ -20,17 +20,24 @@ const Blog = ({id, topic,mark, fileName, npmCode, heading, define, defineWithInd
         {
             defineWithIndex &&  defineWithIndex.map((item, index )=><p key={index}>{item}</p>)
         }
-        {code && <pre className="code">
+        {code && <pre className={`${code_highlight? 'code-highlight':'code'}`}>
             {fileName && <p className='red'>{fileName}</p>}
             {code}
         </pre>
         }
+        <pre className='code'>
+            {fileName && <p className='red'>{fileName}</p>}
+            {
+                codes?.map((code, index) =><div className={`${index%2 && 'code-highlight' }`}>{code}</div>)
+            }
+        </pre>
         {video && <video src={video} controls width="90%" height="500px"></video>}
         </>
     );
 };
 Blog.propTypes = {
     defineWithIndex: PropTypes.array,
+    codes: PropTypes.array,
     // prop-2: PropTypes.func.isRequired
     }
 export default Blog;

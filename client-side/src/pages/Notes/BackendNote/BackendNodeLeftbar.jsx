@@ -1,12 +1,21 @@
 import { useEffect } from "react";
-import { Accordion, Active } from "../../../shared/CommonJS";
+import { Active } from "../../../shared/CommonJS";
 
 
-const FolderLeftbar = () => {
+const BackendNodeLeftbar = () => {
+    const links =[
+        {
+            title:'Get',
+            path:'/backend/get',
+            sub:{
+                title:['with Fetch', 'with axios', 'with axios Hook', 'with Custom Hook'],
+            }
+        }
+    ]
     const getdata = [
         {
-            title:"",
-            topic:["React Project SetUp"]
+            title:"Data",
+            topic:['with Fetch', 'with axios', 'with axios Hook', 'with Custom Hook'],
         },
         {
             title:"",
@@ -27,28 +36,22 @@ const FolderLeftbar = () => {
     ]
     useEffect(() =>{
         Active();
-        Accordion();
     })
     return (
         
-        <>
-        {/* Accordion */}
-        <div className="accordion">Accordion</div>
-        <div className="panel">
-            Accordion Panel
-        </div>
+        <div className="mt-5">
 
             {
                 getdata.map(data=><div key={data.title}>
-                    <div className="heading">{data.title}</div>
+                    <div className="sidebarHeading">{data.title}</div>
                     {
                         data.topic.map(topic=><a key={topic} href={`#${topic}`} className="link">{topic}</a>)
                     }
                 </div>)
             }
 
-        </>
+        </div>
     );
 };
 
-export default FolderLeftbar;
+export default BackendNodeLeftbar;

@@ -23,7 +23,7 @@ p{
     width: 100%;
     height: 40px;
     line-height: 40px;
-    padding: 0 2%;
+    padding: 0 4%;
     z-index: 4;
     background-color: #01071b;
     position: fixed;
@@ -90,11 +90,11 @@ p{
   text-decoration: none;
 }
 .content{
-    width: 80%;
+    /* width: 80%; */
     height: 100%;
     position: relative;
     top:40px;
-    left: 20%;
+    /* left: 20%; */
     z-index: 2;
     /* margin-left: 15%; */
     padding: 0px 10px 20px 10px;
@@ -137,11 +137,22 @@ p{
 }
 .code{
   width: auto;
+  padding: 10px;
   /* background-color: #fff; */
   background: rgb(1, 9, 19);
   color: #f7f4f1;
   /* padding: 8px 12px; */
   border-left: 4px solid #4CAF50;
+  word-wrap: break-word;
+  font-size: 15px;
+  font-weight: 100;
+  overflow: auto;
+}
+.code-highlight{
+  width: auto;
+  color: #0f0e0e;
+  padding: 0 4px;
+  background: rgb(240, 240, 233);
   word-wrap: break-word;
   font-size: 15px;
   font-weight: 100;

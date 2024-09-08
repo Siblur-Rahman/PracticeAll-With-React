@@ -24,21 +24,21 @@ const Map = () => {
             <div onClick={handleDesplay}>Code2</div>
             <div className={`rounded-lg p-2 hidden`}>
                 <Blog
-                code={`
+                code={[`
                 array1.map((item, ind)=><p key={ind}>{item}</p>)
                 array1.map((item, ind)=>{return <p key={ind}>{item}</p>})
                 array1.map((item, ind)=>(<p key={ind}>{item}</p>))  
-                    `}
+                    `]}
                 />
             </div>
             <div onClick={handleDesplay}>Code2</div>
             <div className={`rounded-lg p-2 hidden`}>
                 <Blog
-                code={`
+                code={[`
                 array1.map((item, ind)=><p key={ind}>{item}</p>)
                 array1.map((item, ind)=>{return <p key={ind}>{item}</p>})
                 array1.map((item, ind)=>(<p key={ind}>{item}</p>))  
-                    `}
+                    `]}
                 />
             </div>
         </div>

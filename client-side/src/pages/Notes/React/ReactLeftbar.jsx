@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import {Active } from "../../../shared/CommonJS";
+import { Accordion, Active } from "../../../shared/CommonJS";
 // import useGetData from './../../../hooks/useGetData';
 
 
@@ -13,7 +13,7 @@ const ReactLeftbar = () => {
         },
         {
             title:"Route",
-            topic:["React Router","Private"]
+            topic:["React Router","Private","useNavitate","Navigate"]
     
         },
         {
@@ -43,15 +43,20 @@ const ReactLeftbar = () => {
     ]
     useEffect(() =>{
         Active();
+        Accordion();
     })
     return (
         
         <>
         {/* Accordion */}
+        <div className="accordion">Accordion</div>
+        <div className="panel">
+            Accordion Panel
+        </div>
 
             {
                 getdata.map(data=><div key={data.title}>
-                    <div className="heading">{data.title}</div>
+                    <div className="sidebarHeading">{data.title}</div>
                     {
                         data.topic.map(topic=><a key={topic} href={`#${topic}`} className="link">{topic}</a>)
                     }

@@ -13,8 +13,7 @@ const corsOptions = {
   origin: [
     'http://localhost:5173',
     'http://localhost:5174',
-    'https://assign-11-c79bf.web.app',
-    'https://assign-11-c79bf.firebaseapp.com',
+    'http://localhost:5175',
   ],
   credentials: true,
   optionSuccessStatus: 200,
@@ -89,7 +88,6 @@ async function run() {
     })
     // Get all items data from db for Admin
     app.get('/allitems', async (req, res) => {
-      console.log('Hit')
       const result = await itemsCollection.find().toArray()
       res.send(result)
     })

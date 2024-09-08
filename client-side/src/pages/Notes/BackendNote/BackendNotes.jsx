@@ -1,8 +1,9 @@
 import {useEffect } from "react";
-import {Active} from "../../../shared/CommonJS"
+import { Active } from "../../../shared/CommonJS";
 import Blog from "../../../shared/Blog";
 
-const FileName = () => {
+
+const BackendNotes = () => {
     useEffect(() =>{
         Active();
     })
@@ -16,4 +17,4 @@ const FileName = () => {
     );
 };
 
-export default FileName;
+export default BackendNotes;

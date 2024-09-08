@@ -108,8 +108,8 @@ const IndexPH = () => {
 <h3 className="heading">67-3</h3>
         <p>UseNavigate with state, useLocation 67-3 :</p>
         <p>Axios 67-3  7:40</p>
-        <p> 67-  :</p>
-        <p> 67-  :</p>
+        <p> 67-4, 5  load data with Tanstack Query 4:30, 00:00</p>
+        <p> 67-4 Detracture  10:20</p>
         <p> 67-  :</p>
 <h3 className="heading">67-4 Simple Overview Of React Query And Load Data</h3>
         <p>TanstStack Query 67-4 4:50  :</p>

@@ -1,67 +1,80 @@
 /* eslint-disable react/prop-types */
-import axios from 'axios'
-import { createContext, useState } from 'react'
-import toast from 'react-hot-toast'
-
+import { createContext, useEffect, useState } from 'react'
+import {
+  GoogleAuthProvider,
+  createUserWithEmailAndPassword,
+  getAuth,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signOut,
+  updateProfile,
+} from 'firebase/auth'
+import { app } from '../firebase/firebase.config'
 
 export const AuthContext = createContext(null)
+const auth = getAuth(app)
+const googleProvider = new GoogleAuthProvider()
+
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
-
   const [loading, setLoading] = useState(true)
 
-  // const signIn = async (email, password) => {
-  //   // setUser(users.find((user) => user.email===email && user.pass===password))
-  //   const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/user`,
-  //     {password, email})
-  //   setUser(data)
-  // }
-  // const {setUser} = useAuth()
-  const signIn = async (email, password) => {
-    const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/user`,
-      {password, email})
-      if(data){
-        setUser(data)
-}
+  const createUser = (email, password) => {
+    setLoading(true)
+    return createUserWithEmailAndPassword(auth, email, password)
+  }
 
-    return data
+  const signIn = (email, password) => {
+    setLoading(true)
+    return signInWithEmailAndPassword(auth, email, password)
+  }
+
+  const signInWithGoogle = () => {
+    setLoading(true)
+    return signInWithPopup(auth, googleProvider)
   }
 
   const logOut = async () => {
     setLoading(true)
-    // return signOut(auth)
-    setUser(null)
-   const {data} = await axios(`${import.meta.env.VITE_API_URL}/logout`,
-      {withCredentials: true} )
+    return signOut(auth)
   }
-// delete
-const handleDelete = async(id, navigate)=>{
-  console.log('handleDelete function active', id)
-      try{
-        const {data} = await axios.delete(`${import.meta.env.VITE_API_URL}/deleteItem/${id}`)
-        console.log(data)
-        if(data?.deletedCount>0){
-          toast.success('Item Data delete Successfully!')
-          navigate()
-        }
-      }
-      catch(err){
-        console.log(err)
-      }
-}
+
+  const updateUserProfile = (name, photo) => {
+    return updateProfile(auth.currentUser, {
+      displayName: name,
+      photoURL: photo,
+    })
+  }
+
+  // onAuthStateChange
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, currentUser => {
+      setUser(currentUser)
+      console.log('CurrentUser-->', currentUser)
+      setLoading(false)
+    })
+    return () => {
+      return unsubscribe()
+    }
+  }, [])
 
   const authInfo = {
     user,
     setUser,
     loading,
     setLoading,
+    createUser,
     signIn,
+    signInWithGoogle,
     logOut,
-    handleDelete
+    updateUserProfile,
   }
 
   return (
-    <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={authInfo}>
+        {children}
+     </AuthContext.Provider>
   )
 }
 

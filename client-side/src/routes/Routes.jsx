@@ -5,11 +5,19 @@ import Javascript from '../pages/Javascript/Javascript';
 import Notes from '../pages/Notes/Notes'
 import Home from '../pages/Home'
 import ErrorPage from '../pages/ErrorPage'
-import Backend from '../pages/Backend/Backend';
-import Get from './../pages/Backend/get/Get';
-import Post from './../pages/Backend/post/Post';
-import Put from './../pages/Backend/put/Put';
-import Patch from './../pages/Backend/patch/Patch';
+import ReactNote from '../pages/Notes/React/ReactNote';
+import Login from '../pages/Authentication/Login';
+import SignUp from '../pages/Authentication/SignUp';
+import HowTo from '../pages/HowTo/HowTo';
+import BackendNotes from '../pages/Notes/BackendNote/BackendNotes';
+import Get from './../pages/HowTo/Data/get/Get';
+import Post from './../pages/HowTo/Data/post/Post';
+import Put from './../pages/HowTo/Data/put/Put';
+import Patch from './../pages/HowTo/Data/patch/Patch';
+import Calculate from '../pages/HowTo/Calculate/Calculate';
+import Empty from '../shared/Empty';
+import JavasctiptNotes from '../pages/Notes/Javascript/JavasctiptNotes';
+import FolderNotes from '../pages/Notes/_folder/FolderNote';
 
 const router = createBrowserRouter([
   {
@@ -21,32 +29,46 @@ const router = createBrowserRouter([
         path:'/',
         element:<Home/>
       },
-      
-      // Backend
-      // crud operation
       {
-        path:'/backend/',
-        element:<Backend/>
+        path:'/login',
+        element:<Login/>
       },
       {
-        path:'/backend/get',
+        path:'/signup',
+        element:<SignUp/>
+      },
+      {
+        path:'/howto',
+        element:<HowTo/>
+      },
+      // data
+      {
+        path:'/howto/get',
         element:<Get/>
       },
       {
-        path:'/backend/post',
+        path:'/howto/post',
         element:<Post/>
       },
       {
-        path:'/backend/put',
+        path:'/howto/put',
         element:<Put/>
       },
       {
-        path:'/backend/patch',
+        path:'/howto/patch',
         element:<Patch/>
+      },
+      {
+        path:'/howto/calcutate',
+        element:<Calculate/>
+      },
+      {
+        path:'/howto/',
+        element:<Empty/>
       },
       // Javascript
       {
-        path:'/prac_javascript',
+        path:'/javascript',
         element:<Javascript/>,
       },
 
@@ -57,8 +79,24 @@ const router = createBrowserRouter([
         element:<Notes/>
       },
       {
+        path:'/notes/react',
+        element:<ReactNote/>
+      },
+      {
+        path:'/notes/backend',
+        element:<BackendNotes/>
+      },
+      {
+        path:'/notes/javascript',
+        element:<JavasctiptNotes/>
+      },
+      {
         path:'/notes/tools',
         element:<Tools/>
+      },
+      {
+        path:'/notes/folder',
+        element:<FolderNotes/>
       }
     ]
   }

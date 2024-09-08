@@ -21,21 +21,21 @@ const ReactNote = () => {
         <div>
             <Blog
             topic={'React Project SetUp'}
-            code={`
+            code={[`
 npm create vite@latest my-project -- --template react
 cd my-project
 cd my-project
 npm install
 npm run dev
-`}
+`]}
             />
                <div className="code">
                <Blog
                 heading={'React Setup with tailwindcss'}
-                code={`
+                code={[`
 npm install -D tailwindcss postcss autoprefixer
 npx tailwindcss init -p
-                    `}
+                    `]}
                 />
                 <Blog
                 fileName={'tailwind.config.js'}

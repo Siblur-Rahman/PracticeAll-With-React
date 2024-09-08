@@ -3,11 +3,10 @@ import{ useState } from 'react';
 const useShowHide = () => {
     const [showHide, setShowHide] = useState([])
 
-    const handleDesplay=(e)=>{
-      // if(desplay==='hidden') {setDesplay('')}else{setDesplay('hidden')}
+   const handleToggleDesplay =(e)=>{
       e.target.nextElementSibling.classList.toggle('hidden')
-  }
-      setShowHide(handleDesplay)
+    }
+      setShowHide(handleToggleDesplay)
     return [showHide];
 };
 
