@@ -1,105 +1,99 @@
-import { createBrowserRouter } from 'react-router-dom'
-import Main from '../layouts/Main'
-import Tools from './../pages/Notes/Tools/Tools';
-import Javascript from '../pages/Javascript/Javascript';
-import Notes from '../pages/Notes/Notes'
-import Home from '../pages/Home'
-import ErrorPage from '../pages/ErrorPage'
-import ReactNote from '../pages/Notes/React/ReactNote';
-import Login from '../pages/Authentication/Login';
-import SignUp from '../pages/Authentication/SignUp';
-import HowTo from '../pages/HowTo/HowTo';
-import BackendNotes from '../pages/Notes/BackendNote/BackendNotes';
-import Get from './../pages/HowTo/Data/get/Get';
-import Post from './../pages/HowTo/Data/post/Post';
-import Put from './../pages/HowTo/Data/put/Put';
-import Patch from './../pages/HowTo/Data/patch/Patch';
-import Calculate from '../pages/HowTo/Calculate/Calculate';
-import Empty from '../shared/Empty';
-import JavasctiptNotes from '../pages/Notes/Javascript/JavasctiptNotes';
-import FolderNotes from '../pages/Notes/_folder/FolderNote';
-
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <Main />,
-    errorElement: <ErrorPage />,
-    children: [
-      {
-        path:'/',
-        element:<Home/>
-      },
-      {
-        path:'/login',
-        element:<Login/>
-      },
-      {
-        path:'/signup',
-        element:<SignUp/>
-      },
-      {
-        path:'/howto',
-        element:<HowTo/>
-      },
-      // data
-      {
-        path:'/howto/get',
-        element:<Get/>
-      },
-      {
-        path:'/howto/post',
-        element:<Post/>
-      },
-      {
-        path:'/howto/put',
-        element:<Put/>
-      },
-      {
-        path:'/howto/patch',
-        element:<Patch/>
-      },
-      {
-        path:'/howto/calcutate',
-        element:<Calculate/>
-      },
-      {
-        path:'/howto/',
-        element:<Empty/>
-      },
-      // Javascript
-      {
-        path:'/javascript',
-        element:<Javascript/>,
-      },
-
-
-      // Notes Routes
-      {
-        path:'/notes',
-        element:<Notes/>
-      },
-      {
-        path:'/notes/react',
-        element:<ReactNote/>
-      },
-      {
-        path:'/notes/backend',
-        element:<BackendNotes/>
-      },
-      {
-        path:'/notes/javascript',
-        element:<JavasctiptNotes/>
-      },
-      {
-        path:'/notes/tools',
-        element:<Tools/>
-      },
-      {
-        path:'/notes/folder',
-        element:<FolderNotes/>
-      }
-    ]
-  }
-])
-
-export default router
+import {
+  createBrowserRouter,
+} from "react-router-dom";
+import Main from '../Layout/Main';
+import Home from './../pages/Home/Home/Home';
+import Menu from '../pages/Menu/Menu';
+import Order from '../pages/Order/Order/Order';
+import Login from '../pages/Login/Login';
+import SignUp from '../pages/SignUp/SignUp';
+import Secret from '../pages/shared/Secret';
+import PrivatRoute from './PrivatRoute';
+import Dashboard from '../Layout/Dashboard';
+import Cart from '../pages/Dashboard/Cart/Cart';
+import AllUsers from '../pages/Dashboard/AllUesrs/AllUsers';
+import AddItem from "../pages/Dashboard/AddItem/AddItem";
+import AdminRoute from "./AdminRoute";
+import ManageItems from "../pages/Dashboard/ManageItems/ManageItems";
+import UpdateItem from "../pages/Dashboard/UpdateItem/UpdateItem";
+import Payment from "../pages/Dashboard/Payment/Payment";
+import PaymentHistory from "../pages/Dashboard/PaymentHistory/PaymentHistory";
+import UserHome from "../pages/Dashboard/UserHome/UserHome";
+import AdminHome from "../pages/Dashboard/AdminHom/AdminHome";
+export const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Main></Main>,
+      children:[
+        {
+            path: "/",
+            element:<Home/>
+        },
+        {
+            path:"menu",
+            element:<Menu/>
+        },
+        {
+            path:"order/:category",
+            element:<Order/>
+        },
+        {
+          path:"login",
+          element:<Login/>
+        },
+        {
+          path:"signup",
+          element:<SignUp/>
+        },
+        {
+          path:"secret",
+          element:<PrivatRoute><Secret/></PrivatRoute>
+        }
+      ]
+    },
+    {
+      path:"dashboard",
+      element:<PrivatRoute><Dashboard/></PrivatRoute>,
+      children:[
+        // normal routes
+        {
+          path:'userHome',
+          element:<UserHome/>
+        },
+        {
+          path:"cart",
+          element:<Cart/>
+        },
+        {
+          path:'payment',
+          element:<Payment/>
+        },
+        {
+          path:'paymentHistory',
+          element:<PaymentHistory/>
+        },
+        // admin routes
+        {
+          path:'adminHome',
+          element:<AdminRoute><AdminHome/></AdminRoute>
+        },
+        {
+          path:'addItem',
+          element:<AdminRoute><AddItem/></AdminRoute>
+        },
+        {
+          path:'manageitems',
+          element:<AdminRoute><ManageItems/></AdminRoute>
+        },
+        {
+          path:'updateItem/:id',
+          element:<AdminRoute><UpdateItem/></AdminRoute>,
+          loader: ({params}) => fetch(`http://localhost:5000/menu/${params.id}`)
+        },
+        {
+          path:"users",
+          element:<AdminRoute><AllUsers/></AdminRoute>
+        }
+      ]
+    }
+  ]);

@@ -1,47 +1,18 @@
-// import bcrypt from 'bcrypt'
-// const bcrypt = require('bcrypt');
-const express = require('express')
-const cors = require('cors')
-const jwt = require('jsonwebtoken')
-const cookieParser = require('cookie-parser')
-const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb')
-require('dotenv').config()
-const port = process.env.PORT || 5001
-const app = express()
+const express = require("express");
+const app = express();
+const cors = require('cors');
+const jwt = require('jsonwebtoken');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+require('dotenv').config();
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+const port = process.env.PROT || 5000;
 
-const corsOptions = {
-  origin: [
-    'http://localhost:5173',
-    'http://localhost:5174',
-    'http://localhost:5175',
-  ],
-  credentials: true,
-  optionSuccessStatus: 200,
-}
-app.use(cors(corsOptions))
-app.use(express.json())
-app.use(cookieParser())
 
-// verify jwt middleware
-const verifyToken = (req, res, next) =>{
-  const token = req.cookies?.token
-  if(!token) return res.status(401).send({message:'unauthorized'})
-      if(token){
-        jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) =>{
-          if(err){
-            return console.log(err)
-            return res.status(401).send({message:'unauthorized'})
-          }
-          console.log(decoded)
-          req.user = decoded
-          next()
-        })
-      }
-}
-// p- 18:53
+// middleware
+app.use(cors())
+app.use(express.json());
 const uri = "mongodb://localhost:27017";
 // const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.ts8x6gb.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
-
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -49,207 +20,258 @@ const client = new MongoClient(uri, {
     version: ServerApiVersion.v1,
     strict: true,
     deprecationErrors: true,
-  },
-})
+  }
+});
+
 async function run() {
   try {
+    // Connect the client to the server	(optional starting in v4.7)
+    await client.connect();
+     // Get the database and collection on which to run the operation
+     const menuCollection = client.db("msrRestaurantDb").collection("menu");
+     const reviewsCollection = client.db("msrRestaurantDb").collection("reviews");
+     const cartsCollection = client.db("msrRestaurantDb").collection("carts");
+     const paymentCollection = client.db("msrRestaurantDb").collection("payment");
+     const usersCollection = client.db("msrRestaurantDb").collection("users");
 
-    // Items
-    const usersCollection = client.db('allPracticWithReact').collection('users')
-    const itemsCollection = client.db('allPracticWithReact').collection('items')
-    const itemwishlistCollection = client.db('practiceAll').collection('itemwishlist')
-    const productsCollection = client.db('msrStore').collection('products')
+  // jwt related api
+  app.post('/jwt', async(req, res) =>{
+    const user = req.body;
+    const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
+      expiresIn: "11h"});
+    res.send({ token})
+  })
 
-
-    // jwt genarate
-    app.post('/jwt', async(req, res)=>{
-      const user = req.body;
-      const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
-        expiresIn:'2h'
-      })
-      // res.send({token})
-      res
-      .cookie('token', token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        cameSite: process.env.NODE_ENV ==='production'?'none':'scrict'
-      }).send({success:true})
-    })
-    // Clear token on logout
-    app.get('/logout', (req, res)=>{
-      res
-      .clearCookie('token',{
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        cameSite: process.env.NODE_ENV ==='production'?'none':'scrict',
-        maxAge:0
-      })
-      .send({success:true})
-    })
-    // Get all items data from db for Admin
-    app.get('/allitems', async (req, res) => {
-      const result = await itemsCollection.find().toArray()
-      res.send(result)
-    })
-    // // Get all users data from db for admin 
-    // app.get('/users', async (req, res) => {
-    //   const result = await usersCollection.find().toArray()
-    //   res.send(result)
-    // })
-        // Get all users data from db for admin 
-        app.post('/user', async (req, res) => {
-          const {password, email} = req.body
-          const query = {pass:password, email:email}
-          const result = await usersCollection.findOne(query)
-          res.send(result)
-        })
-
-    // Get all approve items data from db for user, for admin
-    app.get('/approveitems', async (req, res) => {
-      const query = {status:'approve'}
-      const result = await itemsCollection.find(query).toArray()
-      res.send(result)
-    })
-    // Get all approve items data from db for admin
-    app.get('/pendingitems', async (req, res) => {
-      const query = {status:'pending'}
-      const result = await itemsCollection.find(query).toArray()
-      res.send(result)
-    })
-        // Save a item data in db for creator
-        app.post('/product', async (req, res) => {
-          const productData = req.body
-          const result = await productsCollection.insertOne(productData)
-          res.send(result)
-        })
-        app.post('/item', async (req, res) => {
-          const itemData = req.body
-          const result = await itemsCollection.insertOne(itemData)
-          res.send(result)
-        })
-
-        // Save a user data in db for user
-        app.post('/signup', async (req, res) => {
-          const userData = req.body
-          const query = { email: userData.email };
-          const existingUser = await usersCollection.findOne(query);
-          if (existingUser) {
-            return res.send({ message: "user already exists", insertedId: null });
-          }
-          const result = await usersCollection.insertOne(userData)
-          res.send(result)
-        })
-      // Save a wishitem data in db for user
-      app.post('/itemwishlist', async (req, res) => {
-        const itemwishlistData = req.body
-        const query = { 'itemId': itemwishlistData.itemId, 'user.email': itemwishlistData.user.email}
-        const existingItem = await itemwishlistCollection.findOne(query)
-        if(existingItem){
-          return res.send({message: "item already exists in your wishlist", insertedId: null})
-        }
-        const result = await itemwishlistCollection.insertOne(itemwishlistData)
-        res.send(result)
-      })
-      //  get My wishItem for user
-      app.get('/mywishlist/:email', async(req, res)=>{
-        const email = req.params.email;
-        const query = {'user.email':email}
-        const result = await itemwishlistCollection.find(query).toArray()
-        res.send(result)
-      })
-      // delete My wishlist for user
-      app.delete('/mywishlist/:id', async(req, res)=>{
-        const id = req.params.id
-        const query = {_id: new ObjectId(id)}
-        const result = await itemwishlistCollection.deleteOne(query)
-        res.send(result)
-      })
-
-
-    
-    // Get specific item from bd for all
-    app.get('/item/:id', async (req, res) => {
-          // const id = req.params.id
-          // const query = { _id: new ObjectId(id) }
-          // const result = await itemsCollection.findOne(query)
-          const result = await itemsCollection.findOne({_id: new ObjectId(req.params.id)})
-          res.send(result)
-        })
-      // get all items posted by a specific for creator
-    app.get('/myposteditems/:email', verifyToken, async (req, res) => {
-      // from verify token
-      const tokenEmail = req.user.email
-      const email = req.params.email
-      if(tokenEmail !== email){
-        return res.status(403).send({message:'forbidden access'})
+  // mddleware  
+  const verifyToken = (req, res, next) =>{
+    console.log("inside verify Token", req.headers.authorization);;
+    if(!req.headers.authorization){
+      return res.status(401).send({message: "unauthorized access"})
+    }
+    const token = req.headers.authorization.split(' ')[1];
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) =>{
+      if(err){
+        return res.status(401).send({message: 'unauthorized access'})
       }
-      const query = { 'creator.email': email }
-      const result = await itemsCollection.find(query).toArray()
-      res.send(result)
+      req.decoded = decoded
+      next()
     })
-        app.put('/updateItem/:id', async (req, res) => {
-          const id = req.params.id;
-          const itemData = req.body;
-          const query = { _id: new ObjectId(id) };
-          const data = {
-            $set:{
-              // item_title:req.body.item_title
-              ...itemData
-            }
-          }
-          const result = await itemsCollection.updateOne(query, data)
-      res.send(result)
-        })
-        app.patch('/patchItem/:id', async (req, res) => {
-          const id = req.params.id;
-          const itemData = req.body;
-          const query = { _id: new ObjectId(id) };
-          const data = {
-            $set:{
-              // item_title:req.body.item_title
-              ...itemData
-            }
-          }
-          const result = await itemsCollection.updateOne(query, data)
-      res.send(result)
-        })
-        app.put('/status/:id', async (req, res) => {
-          const id = req.params.id;
-          const query = { _id: new ObjectId(id) };
-          const data = {
-            $set:{
-              status:'approve'
-            }
-          }
-          const result = await itemsCollection.updateOne(query, data)
-      res.send(result)
-        })
-        app.delete('/deleteItem/:id', async(req, res)=>{
-          const id = req.params.id;
-          const query = {_id: new ObjectId(id)}
-          const result = await itemsCollection.deleteOne(query);
-          res.send(result)
-        })
-
-    //
-    app.get('/recentitems', async (req, res) => {
-      const query = {status:'approve'}
-      const result = await itemsCollection.find(query).sort({_id: -1}).limit(6).toArray()
-      res.send(result)
-    }) 
-
-    // Send a ping to confirm a successful connection
-    // await client.db('admin').command({ ping: 1 })
-    console.log(
-      'Pinged your deployment. You successfully connected to MongoDB!'
-    )
-  } finally {
-    // Ensures that the client will close when you finish/error
   }
-}
-run().catch(console.dir)
-app.get('/', (req, res) => {
-  res.send("Hello from Farwah's Server....")
+  //  use verify admin after verifyToken
+ const verifyAdmin = async(req, res, next) =>{
+  const email = req.decoded.email;
+  const query = {email: email};
+  const user = await usersCollection.findOne(query);
+  const isAdman = user?.role === 'admin';
+  if(!isAdman){
+    return res.status(403).send({message: 'forbidden access'});
+  }
+  next();
+ }
+    // user Related api
+ // Save a user data in db for user
+
+ app.get("/users", verifyToken, verifyAdmin, async(req, res) =>{
+  console.log(req.headers)
+  const result = await usersCollection.find().toArray();
+  res.send(result)
+ })
+
+
+ app.get('/user/admin/:email', verifyToken, async(req, res) =>{
+    const email = req.params.email;
+    if(email !== req.decoded.email){
+      return res.status(403).send({message: 'forbidden access'});
+    }
+    const query = {email: email};
+    const user = await usersCollection.findOne(query);
+    let admin = false;
+    if(user){
+      admin = user?.role === 'admin'
+    }
+    // 68-9 Logout unauthorized access and check is admin 8:51
+    res.send({admin})
+ })
+ app.post('/signup', async (req, res) => {
+  const userData = req.body
+  const query = { email: userData.email };
+  const existingUser = await usersCollection.findOne(query);
+  if (existingUser) {
+    return res.send({ message: "user already exists", insertedId: null });
+  }
+  const result = await usersCollection.insertOne(userData)
+  res.send(result)
+})
+app.get('/menu', async (req, res) =>{
+    const result = await menuCollection.find().toArray();
+    res.send(result)
+  })
+app.post('/menu', verifyToken, verifyAdmin, async (req, res) =>{
+  const menuData = req.body
+    const result = await menuCollection.insertOne(menuData);
+    res.send(result)
+  })
+app.patch('/menu/:id', verifyToken, verifyAdmin, async (req, res) =>{
+    const item = req.body;
+    const id = req.params.id;
+    const filter = {_id: new ObjectId(id)};
+    const updateDoc ={
+      $set:{
+        name: item.name,
+        category: item.category,
+        recipe: item.recipe,
+        image: item.image
+
+      }
+    }
+    const result = await menuCollection.updateOne(filter, updateDoc);
+    res.send(result)
+  })
+app.delete('/menu/:id', verifyToken, verifyAdmin, async (req, res) =>{
+    const id = req.params.id
+    const query = {_id: new ObjectId(id)};
+    const result = await menuCollection.deleteOne(query);
+    res.send(result)
+  })
+app.get('/menu/:id', async (req, res) =>{
+    const id = req.params.id
+    const query = {_id: new ObjectId(id)};
+    const result = await menuCollection.findOne(query);
+    res.send(result)
+  })
+
+ app.get('/reviews', async(req, res) =>{
+        const result = await reviewsCollection.find().toArray();
+        res.send(result)
+     })
+app.delete('/user/:id', verifyToken, async(req, res) =>{
+  const id = req.params.id;
+  const query = {_id: new ObjectId(id)};
+  const result = await usersCollection.deleteOne(query);
+  res.send(result);
+})
+app.patch('/user/admin/:id', verifyAdmin, async(req, res) =>{
+  const id = req.params.id;
+  const filter = {_id: new ObjectId(id)};
+  const updatedDoc ={
+    $set:{
+      role: 'admin'
+    }
+  }
+  const result = await usersCollection.updateOne(filter, updatedDoc);
+  res.send(result);
+})
+    //  carts Collection
+    app.get("/carts", async (req, res) =>{
+      const email = req.query.email;
+      const query = {email: email}
+      const result = await cartsCollection.find(query).toArray();
+      res.send(result);
+    })
+    
+     app.post("/carts", async(req, res) =>{
+      const cartItem = req.body;
+      const result = await cartsCollection.insertOne(cartItem);
+      res.send(result)
+     })
+
+     app.delete("/cart/:id", async(req, res) =>{
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)};
+      const result = await cartsCollection.deleteOne(query);
+      res.send(result)
+     })
+
+    //  payment intent
+    app.post('/create-payment-intent', async (req, res) => {
+        const {price} = req.body;
+        const amount = parseInt(price * 100);
+        console.log(amount)
+
+    // Create a PaymentIntent with the order amount and currency
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: amount,
+      currency: 'usd',
+      payment_method_types: [
+        "card"
+      ],
+  });
+
+  res.send({
+    clientSecret: paymentIntent.client_secret
+  });
+    })
+
+app.post('/payments', async (req, res) => {
+  const payment = req.body;
+  const paymentResult = await paymentCollection.insertOne(payment);
+
+  //  carefully delete each item from the cart
+  console.log('payment info', payment);
+  const query = {
+    _id: {
+      $in: payment.cartIds.map(id => new ObjectId(id))
+    }
+  };
+
+  const deleteResult = await cartsCollection.deleteMany(query);
+
+  res.send({ paymentResult, deleteResult });
+})
+app.get('/payments/:email', verifyToken, async (req, res) => {
+  const query = { email: req.params.email }
+  console.log(query, req.decoded.email)
+  if (req.params.email !== req.decoded.email) {
+    return res.status(403).send({ message: 'forbidden access' });
+  }
+  const result = await paymentCollection.find(query).toArray();
+  res.send(result);
 })
 
-app.listen(port, () => console.log(`Server running on port ${port}`))
+// state or analytics
+app.get('/admin-stats', verifyToken, verifyAdmin, async(req, res) =>{
+  const users = await usersCollection.estimatedDocumentCount();
+  const menuItems = await menuCollection.estimatedDocumentCount();
+  const orders = await paymentCollection.estimatedDocumentCount();
+
+  // this is not the best way
+  // const payments = await paymentCollection.find().toArray();
+  // const revenue = payments.reduce((total, payment) => total+payment.price, 0)
+
+  // this is the best way
+  const result = await paymentCollection.aggregate([
+    {
+      $group:{
+        _id:null,
+        totalRevenue:{
+          $sum: '$price'
+        }
+      }
+    }
+  ]).toArray();
+
+  const revenue = result.length > 0 ? result[0].totalRevenue : 0;
+  res.send({
+    users,
+    menuItems,
+    orders,
+    revenue
+  })
+})
+    // Send a ping to confirm a successful connection
+    await client.db("admin").command({ ping: 1 });
+    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+  } finally {
+    // Ensures that the client will close when you finish/error
+    // await client.close();
+  }
+}
+run().catch(console.dir);
+
+app.get('/', (req, res) =>{
+    res.send('MSR Restaurant server is runing')
+})
+
+app.listen(port, () =>{
+    console.log(`MSR Restaurant server is runing on port ${port}`)
+})
