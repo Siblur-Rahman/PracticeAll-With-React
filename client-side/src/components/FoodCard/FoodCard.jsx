@@ -78,11 +78,10 @@ const FoodCard = ({item}) => {
       })
           // showing sweetalert Conditionaly End
     }
-    console.log(food, user.email)
   }
     return (
-        <div>
-            <div className="card card-compact bg-base-100 w-96 shadow-xl">
+        // <div>
+            <div className="card md:h-[400pxpx] card-compact bg-base-100 shadow-xl">
   <figure>
     <img
       src={image}
@@ -98,7 +97,7 @@ const FoodCard = ({item}) => {
     </div>
   </div>
 </div>
-        </div>
+        // </div>
     );
 };
 
